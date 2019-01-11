@@ -1,0 +1,1 @@
+cd /media/void/big/kernels-note/sources/void-mode && make clean && make mrproper && make exynos9810-crownlte_defconfig && make -j$(nproc --all) && cp -rf arch/arm64/boot/Image ../../tools/split_img/boot.img-zImage && . ../../tools/repackimg.sh 
