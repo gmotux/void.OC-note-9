@@ -1188,7 +1188,6 @@ static __init int init_table(struct exynos_cpufreq_domain *domain)
 	unsigned long *table;
 	unsigned int *volt_table;
 	struct exynos_cpufreq_dm *dm;
-	struct cpumask mask;
 	struct device *dev;
 	int ret = 0;
 
@@ -1248,15 +1247,6 @@ static __init int init_table(struct exynos_cpufreq_domain *domain)
 		/* Initialize table of DVFS manager constraint */
 		list_for_each_entry(dm, &domain->dm_list, list)
 			dm->c.freq_table[index].master_freq = table[index];
-	}
-	dev = get_cpu_device(cpumask_first(&domain->cpus));
-	if (dev){
-            if(domain->id == 1){
-                    cpumask_and(&mask, &domain->cpus, cpu_online_mask);
-                    pr_err("----> Work around max_freq's voltage in init_table: %d",3033000U);
-                    dev_pm_opp_add(get_cpu_device(cpumask_first(&mask)),
-                            3033000U * 1000, volt_table[2]);
-            }
 	}
 	domain->freq_table[index].driver_data = index;
 	domain->freq_table[index].frequency = CPUFREQ_TABLE_END;

@@ -1095,7 +1095,7 @@ static int __init exynos_hpgov_parse_dt(void)
 
 	if (of_property_read_u32(np, "dual_freq", &freq))
 		goto exit;
-	exynos_hpgov.maxfreq_table[DUAL] = 2886000;
+	exynos_hpgov.maxfreq_table[DUAL] = 2860000;
 
 	if (of_property_read_u32(np, "triple_freq", &freq))
 		goto exit;
@@ -1103,9 +1103,9 @@ static int __init exynos_hpgov_parse_dt(void)
 
 	if (of_property_read_u32(np, "quad_freq", &freq))
 		goto exit;
-	exynos_hpgov.maxfreq_table[QUAD] = 2704000;
+	exynos_hpgov.maxfreq_table[QUAD] = 2860000;
 
-	exynos_hpgov.maxfreq_table[DISABLE] = 2886000;
+	exynos_hpgov.maxfreq_table[DISABLE] = 2860000;
 
 	for (i = 0; i <= QUAD; i++)
 		pr_info("HP_GOV: mode %d: max_freq = %d\n",
@@ -1190,11 +1190,11 @@ static int __init exynos_hpgov_init(void)
 		goto failed;
 	}
 
-	/* set default valuse */
+	/* set default values */
 	exynos_hpgov.pol_max = ULONG_MAX;
 	exynos_hpgov.qos_max = ULONG_MAX;
 	exynos_hpgov.enabled = 0;
-	exynos_hpgov.mode = QUAD;
+	exynos_hpgov.mode = DISABLE;
 	exynos_hpgov.user_mode = DISABLE;
 	exynos_hpgov.boostable = true;
 	exynos_hpgov.req_cpu_min = PM_QOS_CPU_ONLINE_MAX_DEFAULT_VALUE;
