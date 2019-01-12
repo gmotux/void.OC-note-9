@@ -1466,7 +1466,7 @@ static int init_dm(struct exynos_cpufreq_domain *domain,
 	root = of_find_node_by_name(dn, "dm-constraints");
 	for_each_child_of_node(root, child) {
 		/*
-		 * Initialize DVFS Manaver constraints
+		 * Initialize DVFS Manager constraints
 		 * - constraint_type : minimum or maximum constraint
 		 * - constraint_dm_type : cpu/mif/int/.. etc
 		 * - guidance : constraint from chipset characteristic

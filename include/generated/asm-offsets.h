@@ -15,7 +15,7 @@
 #define TSK_TI_TTBR0 16 /* offsetof(struct task_struct, thread_info.ttbr0) */
 #define TSK_STACK 40 /* offsetof(struct task_struct, stack) */
 
-#define THREAD_CPU_CONTEXT 2864 /* offsetof(struct task_struct, thread.cpu_context) */
+#define THREAD_CPU_CONTEXT 2880 /* offsetof(struct task_struct, thread.cpu_context) */
 
 #define S_X0 0 /* offsetof(struct pt_regs, regs[0]) */
 #define S_X1 8 /* offsetof(struct pt_regs, regs[1]) */
