@@ -199,6 +199,7 @@ static unsigned int apply_pm_qos(struct exynos_cpufreq_domain *domain,
 
 	freq = max((unsigned int)qos_min, target_freq);
 	freq = min((unsigned int)qos_max, freq);
+
 	return freq;
 }
 
@@ -1211,28 +1212,11 @@ static __init int init_table(struct exynos_cpufreq_domain *domain)
 
 	for (index = 0; index < domain->table_size; index++) {
 		domain->freq_table[index].driver_data = index;
-            
-		if(domain->id == 0){
-			domain->max_freq = 2002000U;
-			domain->max_usable_freq = 2002000U;
-			domain->freq_table[0].frequency = 2002000U;
-			domain->freq_table[1].frequency = 1950000U;
-		}
-		if(domain->id == 1){
-			domain->max_freq = 2886000U;
-			domain->max_usable_freq = 2886000U;
-			domain->freq_table[0].frequency = 2886000U;
-			domain->freq_table[1].frequency = 2860000U;
-			domain->freq_table[2].frequency = 2704000U;
-		}
-		if (table[index] > domain->max_freq){
-			pr_err("----> Above max_freq in init_table: %lu",table[index]);
+
+		if (table[index] > domain->max_freq)
 			domain->freq_table[index].frequency = CPUFREQ_ENTRY_INVALID;
-		}
-		else if (table[index] < domain->min_freq){
-			pr_err("----> Below min_freq in init_table: %lu",table[index]);
+		else if (table[index] < domain->min_freq)
 			domain->freq_table[index].frequency = CPUFREQ_ENTRY_INVALID;
-		}
 		else {
 			struct cpumask mask;
 			domain->freq_table[index].frequency = table[index];
@@ -1242,8 +1226,9 @@ static __init int init_table(struct exynos_cpufreq_domain *domain)
 				continue;
 			cpumask_and(&mask, &domain->cpus, cpu_online_mask);
 			dev_pm_opp_add(get_cpu_device(cpumask_first(&mask)),
-				table[index] * 1000, volt_table[index]);
+					table[index] * 1000, volt_table[index]);
 		}
+
 		/* Initialize table of DVFS manager constraint */
 		list_for_each_entry(dm, &domain->dm_list, list)
 			dm->c.freq_table[index].master_freq = table[index];
@@ -1456,7 +1441,7 @@ static int init_dm(struct exynos_cpufreq_domain *domain,
 	root = of_find_node_by_name(dn, "dm-constraints");
 	for_each_child_of_node(root, child) {
 		/*
-		 * Initialize DVFS Manager constraints
+		 * Initialize DVFS Manaver constraints
 		 * - constraint_type : minimum or maximum constraint
 		 * - constraint_dm_type : cpu/mif/int/.. etc
 		 * - guidance : constraint from chipset characteristic

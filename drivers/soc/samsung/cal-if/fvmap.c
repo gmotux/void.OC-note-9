@@ -239,10 +239,10 @@ int fvmap_get_voltage_table(unsigned int id, unsigned int *table)
 	fvmap_header = fvmap_base;
 	fv_table = fvmap_base + fvmap_header[idx].o_ratevolt;
 	num_of_lv = fvmap_header[idx].num_of_lv;
-        //TODO Undervolt
-	for (i = 0; i < num_of_lv; i++){
-            table[i] = fv_table->table[i].volt;
-        }
+
+	for (i = 0; i < num_of_lv; i++)
+		table[i] = fv_table->table[i].volt;
+
 	return num_of_lv;
 
 }
@@ -396,12 +396,12 @@ static ssize_t store_##type##_percent								\
 	percent_margin_table[margin_id] = input;						\
 	cal_dfs_set_volt_margin(vclk_id | ACPM_VCLK_TYPE, input);				\
 												\
-	return count;          \
-}            \
-                                                                                                \
-static struct kobj_attribute type##_percent =       \
-__ATTR(type##_percent, 0600,         \
-        show_##type##_percent, store_##type##_percent)
+	return count;										\
+}												\
+												\
+static struct kobj_attribute type##_percent =							\
+__ATTR(type##_percent, 0600,									\
+	show_##type##_percent, store_##type##_percent)
 
 attr_percent(MARGIN_MIF, mif_margin);
 attr_percent(MARGIN_INT, int_margin);
@@ -418,128 +418,130 @@ attr_percent(MARGIN_IVA, iva_margin);
 attr_percent(MARGIN_SCORE, score_margin);
 
 static struct attribute *percent_margin_attrs[] = {
-    &mif_margin_percent.attr,
-    &int_margin_percent.attr,
-    &big_margin_percent.attr,
-    &lit_margin_percent.attr,
-    &g3d_margin_percent.attr,
-    &intcam_margin_percent.attr,
-    &cam_margin_percent.attr,
-    &disp_margin_percent.attr,
-    &cp_margin_percent.attr,
-    &fsys0_margin_percent.attr,
-    &aud_margin_percent.attr,
-    &iva_margin_percent.attr,
-    &score_margin_percent.attr,
-    NULL,
+	&mif_margin_percent.attr,
+	&int_margin_percent.attr,
+	&big_margin_percent.attr,
+	&lit_margin_percent.attr,
+	&g3d_margin_percent.attr,
+	&intcam_margin_percent.attr,
+	&cam_margin_percent.attr,
+	&disp_margin_percent.attr,
+	&cp_margin_percent.attr,
+	&fsys0_margin_percent.attr,
+	&aud_margin_percent.attr,
+	&iva_margin_percent.attr,
+	&score_margin_percent.attr,
+	NULL,
 };
 
 static const struct attribute_group percent_margin_group = {
-    .attrs = percent_margin_attrs,
+	.attrs = percent_margin_attrs,
 };
 
-static void fvmap_copy_from_sram(void __iomem *map_base, void __iomem *sram_base) {
-    struct fvmap_header *fvmap_header, *header;
-    struct rate_volt_header *old, *new;
-    struct clocks *clks;
-    struct pll_header *plls;
-    struct vclk *vclk;
-    struct cmucal_clk *clk_node;
-    unsigned int paddr_offset, fvaddr_offset;
-    int size, margin;
-    int i, j;
+static void fvmap_copy_from_sram(void __iomem *map_base, void __iomem *sram_base)
+{
+	struct fvmap_header *fvmap_header, *header;
+	struct rate_volt_header *old, *new;
+	struct clocks *clks;
+	struct pll_header *plls;
+	struct vclk *vclk;
+	struct cmucal_clk *clk_node;
+	unsigned int paddr_offset, fvaddr_offset;
+	int size, margin;
+	int i, j;
 
-    fvmap_header = map_base;
-    header = sram_base;
+	fvmap_header = map_base;
+	header = sram_base;
 
-    size = cmucal_get_list_size(ACPM_VCLK_TYPE);
+	size = cmucal_get_list_size(ACPM_VCLK_TYPE);
 
 #if defined(CONFIG_SAMSUNG_VST_CAL)
-    check_vst_margin();
+	check_vst_margin();
 #endif
 
-    for (i = 0; i < size; i++) {
-        /* load fvmap info */
-        fvmap_header[i].dvfs_type = header[i].dvfs_type;
-        fvmap_header[i].num_of_lv = header[i].num_of_lv;
-        fvmap_header[i].num_of_members = header[i].num_of_members;
-        fvmap_header[i].num_of_pll = header[i].num_of_pll;
-        fvmap_header[i].num_of_mux = header[i].num_of_mux;
-        fvmap_header[i].num_of_div = header[i].num_of_div;
-        fvmap_header[i].gearratio = header[i].gearratio;
-        fvmap_header[i].init_lv = header[i].init_lv;
-        fvmap_header[i].num_of_gate = header[i].num_of_gate;
-        fvmap_header[i].reserved[0] = header[i].reserved[0];
-        fvmap_header[i].reserved[1] = header[i].reserved[1];
-        fvmap_header[i].block_addr[0] = header[i].block_addr[0];
-        fvmap_header[i].block_addr[1] = header[i].block_addr[1];
-        fvmap_header[i].block_addr[2] = header[i].block_addr[2];
-        fvmap_header[i].o_members = header[i].o_members;
-        fvmap_header[i].o_ratevolt = header[i].o_ratevolt;
-        fvmap_header[i].o_tables = header[i].o_tables;
+	for (i = 0; i < size; i++) {
+		/* load fvmap info */
+		fvmap_header[i].dvfs_type = header[i].dvfs_type;
+		fvmap_header[i].num_of_lv = header[i].num_of_lv;
+		fvmap_header[i].num_of_members = header[i].num_of_members;
+		fvmap_header[i].num_of_pll = header[i].num_of_pll;
+		fvmap_header[i].num_of_mux = header[i].num_of_mux;
+		fvmap_header[i].num_of_div = header[i].num_of_div;
+		fvmap_header[i].gearratio = header[i].gearratio;
+		fvmap_header[i].init_lv = header[i].init_lv;
+		fvmap_header[i].num_of_gate = header[i].num_of_gate;
+		fvmap_header[i].reserved[0] = header[i].reserved[0];
+		fvmap_header[i].reserved[1] = header[i].reserved[1];
+		fvmap_header[i].block_addr[0] = header[i].block_addr[0];
+		fvmap_header[i].block_addr[1] = header[i].block_addr[1];
+		fvmap_header[i].block_addr[2] = header[i].block_addr[2];
+		fvmap_header[i].o_members = header[i].o_members;
+		fvmap_header[i].o_ratevolt = header[i].o_ratevolt;
+		fvmap_header[i].o_tables = header[i].o_tables;
 
-        vclk = cmucal_get_node(ACPM_VCLK_TYPE | i);
-        if (vclk == NULL)
-            continue;
-        pr_info("dvfs_type : %s - id : %x\n",
-                vclk->name, fvmap_header[i].dvfs_type);
-        pr_info("  num_of_lv      : %d\n", fvmap_header[i].num_of_lv);
-        pr_info("  num_of_members : %d\n", fvmap_header[i].num_of_members);
+		vclk = cmucal_get_node(ACPM_VCLK_TYPE | i);
+		if (vclk == NULL)
+			continue;
+		pr_info("dvfs_type : %s - id : %x\n",
+			vclk->name, fvmap_header[i].dvfs_type);
+		pr_info("  num_of_lv      : %d\n", fvmap_header[i].num_of_lv);
+		pr_info("  num_of_members : %d\n", fvmap_header[i].num_of_members);
 
-        old = sram_base + fvmap_header[i].o_ratevolt;
-        new = map_base + fvmap_header[i].o_ratevolt;
+		old = sram_base + fvmap_header[i].o_ratevolt;
+		new = map_base + fvmap_header[i].o_ratevolt;
 
-        check_percent_margin(old, fvmap_header[i].num_of_lv);
+		check_percent_margin(old, fvmap_header[i].num_of_lv);
 
-        margin = init_margin_table[vclk->margin_id];
-        if (margin)
-            cal_dfs_set_volt_margin(i | ACPM_VCLK_TYPE, margin);
+		margin = init_margin_table[vclk->margin_id];
+		if (margin)
+			cal_dfs_set_volt_margin(i | ACPM_VCLK_TYPE, margin);
 
-        for (j = 0; j < fvmap_header[i].num_of_lv; j++) {
-            new->table[j].rate = old->table[j].rate;
-            new->table[j].volt = old->table[j].volt;
-            pr_info("  lv : [%7d], volt = %d uV (%d %%) \n",
-                    new->table[j].rate, new->table[j].volt,
-                    volt_offset_percent);
-        }
+		for (j = 0; j < fvmap_header[i].num_of_lv; j++) {
+			new->table[j].rate = old->table[j].rate;
+			new->table[j].volt = old->table[j].volt;
+			pr_info("  lv : [%7d], volt = %d uV (%d %%) \n",
+				new->table[j].rate, new->table[j].volt,
+				volt_offset_percent);
+		}
 
-        for (j = 0; j < fvmap_header[i].num_of_pll; j++) {
-            clks = sram_base + fvmap_header[i].o_members;
-            plls = sram_base + clks->addr[j];
-            clk_node = cmucal_get_node(vclk->list[j]);
-            if (clk_node == NULL)
-                continue;
-            paddr_offset = clk_node->paddr & 0xFFFF;
-            fvaddr_offset = plls->addr & 0xFFFF;
-            if (paddr_offset == fvaddr_offset)
-                continue;
+		for (j = 0; j < fvmap_header[i].num_of_pll; j++) {
+			clks = sram_base + fvmap_header[i].o_members;
+			plls = sram_base + clks->addr[j];
+			clk_node = cmucal_get_node(vclk->list[j]);
+			if (clk_node == NULL)
+				continue;
+			paddr_offset = clk_node->paddr & 0xFFFF;
+			fvaddr_offset = plls->addr & 0xFFFF;
+			if (paddr_offset == fvaddr_offset)
+				continue;
 
-            clk_node->paddr += fvaddr_offset - paddr_offset;
-            clk_node->pll_con0 += fvaddr_offset - paddr_offset;
-            if (clk_node->pll_con1)
-                clk_node->pll_con1 += (unsigned long long) (fvaddr_offset - paddr_offset);
-        }
-    }
+			clk_node->paddr += fvaddr_offset - paddr_offset;
+			clk_node->pll_con0 += fvaddr_offset - paddr_offset;
+			if (clk_node->pll_con1)
+				clk_node->pll_con1 += (unsigned long long)(fvaddr_offset - paddr_offset);
+		}
+	}
 }
 
-int fvmap_init(void __iomem *sram_base) {
-    void __iomem *map_base;
-    struct kobject *kobj;
+int fvmap_init(void __iomem *sram_base)
+{
+	void __iomem *map_base;
+	struct kobject *kobj;
 
-    map_base = kzalloc(FVMAP_SIZE, GFP_KERNEL);
+	map_base = kzalloc(FVMAP_SIZE, GFP_KERNEL);
 
-    fvmap_base = map_base;
-    sram_fvmap_base = sram_base;
-    pr_info("%s:fvmap initialize %p\n", __func__, sram_base);
-    fvmap_copy_from_sram(map_base, sram_base);
+	fvmap_base = map_base;
+	sram_fvmap_base = sram_base;
+	pr_info("%s:fvmap initialize %p\n", __func__, sram_base);
+	fvmap_copy_from_sram(map_base, sram_base);
 
-    /* percent margin for each doamin at runtime */
-    kobj = kobject_create_and_add("percent_margin", power_kobj);
-    if (!kobj)
-        pr_err("Fail to create percent_margin kboject\n");
+	/* percent margin for each doamin at runtime */
+	kobj = kobject_create_and_add("percent_margin", power_kobj);
+	if (!kobj)
+		pr_err("Fail to create percent_margin kboject\n");
 
-    if (sysfs_create_group(kobj, &percent_margin_group))
-        pr_err("Fail to create percent_margin group\n");
+	if (sysfs_create_group(kobj, &percent_margin_group))
+		pr_err("Fail to create percent_margin group\n");
 
-    return 0;
+	return 0;
 }

@@ -926,7 +926,7 @@ config HAVE_UNSTABLE_SCHED_CLOCK
 	bool
 
 config GENERIC_SCHED_CLOCK
-	bool
+bool
 
 menu "Scheduler features"
 

@@ -3015,25 +3015,14 @@ static int exynos_devfreq_parse_ect(struct mem_link_device *mld, char *dvfs_doma
 	} else if (!strcmp(dvfs_domain_name, "dvfs_cpucl0")) {
 		mld->cl0_table.num_of_table = dvfs_domain->num_of_level;
 		for (i = dvfs_domain->num_of_level - 1; i >= 0; i--) {
-                    mld->cl0_table.freq[i] = dvfs_domain->list_level[counter++].level;
-                    mif_err("CL0_LEV[%d] : %u\n", i + 1, mld->cl0_table.freq[i]);
+			mld->cl0_table.freq[i] = dvfs_domain->list_level[counter++].level;
+			mif_err("CL0_LEV[%d] : %u\n", i + 1, mld->cl0_table.freq[i]);
 		}
 	} else if (!strcmp(dvfs_domain_name, "dvfs_cpucl1")) {
 		mld->cl1_table.num_of_table = dvfs_domain->num_of_level;
 		for (i = dvfs_domain->num_of_level - 1; i >= 0; i--) {
-                    if(i == dvfs_domain->num_of_level - 2){
-                        mld->cl1_table.freq[i] = 2886000U;
-                        dvfs_domain->list_level[counter].level = 2886000U;
-                    } else if(i == dvfs_domain->num_of_level - 3){
-                        mld->cl1_table.freq[i] = 2860000U;
-                        dvfs_domain->list_level[counter].level = 2860000U;
-                    } else if(i == dvfs_domain->num_of_level - 3){
-                        mld->cl1_table.freq[i] = 2704000U;
-                        dvfs_domain->list_level[counter].level = 2704000U;
-                    } else {
-                        mld->cl1_table.freq[i] = dvfs_domain->list_level[counter++].level;
-                    }
-                    mif_err("CL1_LEV[%d] : %u\n", i + 1, mld->cl1_table.freq[i]);
+			mld->cl1_table.freq[i] = dvfs_domain->list_level[counter++].level;
+			mif_err("CL1_LEV[%d] : %u\n", i + 1, mld->cl1_table.freq[i]);
 		}
 	} else if (!strcmp(dvfs_domain_name, "dvfs_int")) {
 		mld->int_table.num_of_table = dvfs_domain->num_of_level;

@@ -541,6 +541,7 @@ static int get_static_power(struct cpufreq_cooling_device *cpufreq_device,
 		*power = 0;
 		return 0;
 	}
+
 	rcu_read_lock();
 
 	opp = dev_pm_opp_find_freq_exact(cpufreq_device->cpu_dev, freq_hz,
@@ -551,7 +552,7 @@ static int get_static_power(struct cpufreq_cooling_device *cpufreq_device,
 
 	if (voltage == 0) {
 		dev_warn_ratelimited(cpufreq_device->cpu_dev,
-				     "-----> get_static_power: Failed to get voltage for frequency %lu: %ld\n",
+				     "Failed to get voltage for frequency %lu: %ld\n",
 				     freq_hz, IS_ERR(opp) ? PTR_ERR(opp) : 0);
 		return -EINVAL;
 	}

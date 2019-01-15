@@ -328,107 +328,103 @@
 			};
 		};
 		energy-costs {
-                            CPU_COST_0: core-core0{
-                             busy-cost-data = <
-                              425 350
-                              471 384
-                              517 429
-                              558 556
-                              650 642
-                              701 731
-                              747 827
-                              793 986
-                              885 1088
-                              932 1228
-                              1024 1484
-                             >;
-                             busy-cost-data2 = <
-                              549 310
-                              608 350
-                              667 384
-                              719 429
-                              838 556
-                              905 642
-                              964 731
-                              1024 827
-                             >;
-                             idle-cost-data = <
-                              200
-                              0
-                              0
-                             >;
-                            };
-                            CPU_COST_1: core-core1{
-                             busy-cost-data = <
-                              78 15
-                              103 22
-                              122 30
-                              142 38
-                              163 48
-                              181 58
-                              215 78
-                              251 108
-                              290 150
-                              309 172
-                              335 220
-                             >;
-                             idle-cost-data = <
-                              200
-                              0
-                              0
-                             >;
-                            };
-                            CLUSTER_COST_0: cluster-core0{
-                             busy-cost-data = <
-                              425 105
-                              471 116
-                              517 129
-                              558 168
-                              650 194
-                              701 221
-                              747 250
-                              793 298
-                              885 329
-                              932 371
-                              1024 448
-                             >;
-                             busy-cost-data2 = <
-                              549 93
-                              608 123
-                              667 151
-                              719 181
-                              838 268
-                              905 325
-                              964 393
-                              1024 463
-                             >;
-                             idle-cost-data = <
-                              768
-                              768
-                              0
-                             >;
-                            };
-                            CLUSTER_COST_1: cluster-core1{
-                            busy-cost-data = <
-                              78 3
-                              103 4
-                              122 7
-                              142 9
-                              163 12
-                              181 18
-                              215 26
-                              251 43
-                              290 53
-                              309 58
-                              335 65
-                             >;
-                             idle-cost-data = <
-                              200
-                              200
-                              0
-                             >;
-                            };
-                           };
+			CPU_COST_0: core-core0{
+				busy-cost-data = <
+                                        425 350
+                                        471 384
+                                        517 429
+                                        558 556
+                                        650 642
+                                        701 731
+                                        747 827
+                                        793 986
+                                        885 1088
+                                        932 1228
+                                        1024 1484
+				>;
+                                busy-cost-data2 = <
+                                     549 310
+                                     608 350
+                                     667 384
+                                     719 429
+                                     838 556
+                                     905 642
+                                     964 731
+                                     1024 827
+                                    >;
+				idle-cost-data = <
+					10
+					0
+					0
+				>;
+			};
+			CPU_COST_1: core-core1{
+				busy-cost-data = <
+                                        78 15
+                                        103 22
+                                        122 30
+                                        142 38
+                                        163 48
+                                        181 58
+                                        215 78
+                                        251 108
+                                        290 150
+                                        309 172
+                                        335 220
+				>;
+				idle-cost-data = <
+					1
+					0
+					0
+				>;
+			};
+			CLUSTER_COST_0: cluster-core0{
+				busy-cost-data = <
+                                        425 105
+                                        471 116
+                                        517 129
+                                        558 168
+                                        650 194
+                                        701 221
+                                        747 250
+                                        793 298
+                                        885 329
+                                        932 371
+                                        1024 448
+				>;
+                                busy-cost-data2 = <
+                                        549 93
+                                        608 123
+                                        667 151
+                                        719 181
+                                        838 268
+                                        905 325
+                                        964 393
+                                        1024 463
+                                >;
+				idle-cost-data = <
+					768
+				>;
+			};
+			CLUSTER_COST_1: cluster-core1{
+			busy-cost-data = <
+                                        78 3
+                                        103 4
+                                        122 7
+                                        142 9
+                                        163 12
+                                        181 18
+                                        215 26
+                                        251 43
+                                        290 53
+                                        309 58
+                                        335 65
+				>;
+				idle-cost-data = <
+					200
+				>;
+			};
+		};
 	};
 
 	exynos-pm {
@@ -638,10 +634,10 @@
 		sibling-cpus = "4-7";
 		down-step = <1>;
 
-		max-freq-wo-ocp = <2918000>;
+		max-freq-wo-ocp = <1794000>;
 
 		release-mode = <1>;		/* 0 : current meter, 1 : cpu utilization */
-		release-threshold = <80>;	/* @current meter : current(A), @cpu load : capacity ratio(%) */
+		release-threshold = <50>;	/* @current meter : current(A), @cpu load : capacity ratio(%) */
 		release-duration = <15>;	/* msec */
 	};
 
@@ -4914,18 +4910,25 @@
 		domain@0 {
 			device_type = "freqvar-tune";
 			shared-cpus = "0-3";
-                        boost_table = < 30 598000 20 715000 15 832000 10 949000 5 1053000 0 >;
-                        up_rate_limit_table = < 0 >;
-                        down_rate_limit_table = < 8000 >;
-                        upscale_ratio_table3 = < 140 598000 130 715000 120 832000 110 949000 100 1053000 90 1248000 90 1456000 90 1690000 90 1794000 90 1950000 90>;
+
+                       boost_table = < 0 >;
+                       boost_table2 = < 30 598000 20 715000 15 832000 10 949000 5 1053000 0 >;
+                       
+                       up_rate_limit_table = < 500 >;
+                       down_rate_limit_table = < 2500 >;
+                       upscale_ratio_table = < 70 >;
+                       upscale_ratio_table2 = < 140 598000 90 >;
+                       upscale_ratio_table3 = < 140 598000 130 715000 120 832000 110 949000 100 1053000 90 1248000 90 1456000 90 1690000 90 1794000 90 1950000 90 2002000 90>;
 		};
 		domain@1 {
 			device_type = "freqvar-tune";
 			shared-cpus = "4-7";
-                        boost_table = < 20 858000 15 962000 5 1261000 0 >;
+
+                        boost_table = < 0 >;
+                        boost_table2 = < 20 858000 15 962000 5 1261000 0 >;
                         up_rate_limit_table = < 500 >;
                         down_rate_limit_table = < 2500 >;
-                        upscale_ratio_table = < 80 >;
+			upscale_ratio_table = < 80 >;
 		};
 	};
 
@@ -4950,9 +4953,9 @@
 		skip_lit_enabled = <0>;
 		cl_busy_ratio = <65>;
 		/* single_freq is parsed from ECT */
-		dual_freq = <2964000>;
-		triple_freq = <2964000>;
-		quad_freq = <2964000>;
+		dual_freq = <2886000>;
+		triple_freq = <2704000>;
+		quad_freq = <2074000>;
 		cal-id = <ACPM_DVFS_CPUCL1>;
 	};
 
@@ -4983,7 +4986,7 @@
 			dm-type = <DM_CPU_CL0>;
 
 			min-freq = <455000>;
-			max-freq = <2002000>;
+                        max-freq = <2002000>;
 
 			/* PM QoS Class ID*/
 			pm_qos-min-class = <3>;
@@ -4999,6 +5002,7 @@
 					dm-type = <DM_MIF>;
 						/*  cpu     mif  */
 					table = < 2002000  845000
+                                                  1950000  845000
 						  1898000  845000
 						  1794000  845000
 						  1690000  845000
@@ -5026,7 +5030,7 @@
 			cal-id = <ACPM_DVFS_CPUCL1>;
 			dm-type = <DM_CPU_CL1>;
 
-			min-freq = <741000>;
+			min-freq = <962000>;
 			max-freq = <2886000>;
 			policy-max = <2886000>;
 
@@ -5034,7 +5038,7 @@
 			pm_qos-min-class = <5>;
 			pm_qos-max-class = <6>;
 
-			pm_qos-booting = <1794000>;
+			pm_qos-booting = <2002000>;
 
 			#cooling-cells = <2>; /* min followed by max */
 
@@ -5043,25 +5047,28 @@
 					const-type = <CONSTRAINT_MIN>;
 					dm-type = <DM_MIF>;
 						/*  cpu     mif  */
-					table = < 3033000 1794000
-						  2886000 1794000
-						  2704000 1794000
+					table = < 2964000 2002000
+                                                  2886000 2002000
+						  2860000 2002000
+						  2704000 2002000
 						  2652000 1794000
 						  2496000 1794000
 						  2314000 1794000
-						  2106000 1794000
-						  2002000 1539000
-						  1924000 1539000
-						  1794000 1539000
-						  1690000 1014000
-						  1586000  845000
+						  2158000 1794000
+						  2002000 1794000
+						  1924000 1794000
+						  1794000 1794000
+						  1690000 1539000
+						  1586000 1014000
 						  1469000  845000
 						  1261000  676000
 						  1170000  676000
 						  1066000  676000
 						   962000  421000
 						   858000  421000
-						   741000  421000>;
+						   741000  421000
+						   650000  421000
+						   598000  421000 >;
 				};
 				mif-skew {
 					guidance;
@@ -5140,43 +5147,43 @@
 
 			trips {
 				big_cold: big-cold {
-					temperature = <50000>;
-					hysteresis = <1000>; /* millicelsius */
+					temperature = <80000>;
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				big_switch_on: big-switch-on {
-					temperature = <90000>; /* millicelsius */
+					temperature = <85000>; /* millicelsius */
 					hysteresis = <1000>; /* millicelsius */
 					type = "active";
 				};
 				big_control_temp: big-control-temp {
-					temperature = <98000>; /* millicelsius */
-					hysteresis = <1000>; /* millicelsius */
+					temperature = <93000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "passive";
 				};
 				big_alert0: big-alert0 {
-					temperature = <99000>; /* millicelsius */
-					hysteresis = <1000>; /* millicelsius */
+					temperature = <95000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				big_alert1: big-alert1 {
 					temperature = <100000>; /* millicelsius */
-					hysteresis = <1000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				big_alert2: big-alert2 {
 					temperature = <105000>; /* millicelsius */
-					hysteresis = <1000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				big_alert3: big-alert3 {
 					temperature = <110000>; /* millicelsius */
-					hysteresis = <1000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				big_hot: big-hot {
 					temperature = <115000>; /* millicelsius */
-					hysteresis = <1000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "hot";
 				};
 			};
@@ -5197,43 +5204,43 @@
 
 			trips {
 				little_alert0: little-alert0 {
-					temperature = <20000>; /* millicelsius */
+					temperature = <80000>; /* millicelsius */
 					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				little_alert1: little-alert1 {
-					temperature = <76000>; /* millicelsius */
-					hysteresis = <5000>; /* millicelsius */
+					temperature = <86000>; /* millicelsius */
+					hysteresis = <1000>; /* millicelsius */
 					type = "active";
 				};
 				little_alert2: little-alert2 {
-					temperature = <81000>; /* millicelsius */
-					hysteresis = <5000>; /* millicelsius */
+					temperature = <91000>; /* millicelsius */
+					hysteresis = <1000>; /* millicelsius */
 					type = "active";
 				};
 				little_alert3: little-alert3 {
-					temperature = <86000>; /* millicelsius */
-					hysteresis = <5000>; /* millicelsius */
+					temperature = <96000>; /* millicelsius */
+					hysteresis = <1000>; /* millicelsius */
 					type = "active";
 				};
 				little_alert4: little-alert4 {
-					temperature = <91000>; /* millicelsius */
-					hysteresis = <5000>; /* millicelsius */
+					temperature = <97000>; /* millicelsius */
+					hysteresis = <1000>; /* millicelsius */
 					type = "active";
 				};
 				little_alert5: little-alert5 {
-					temperature = <96000>; /* millicelsius */
-					hysteresis = <5000>; /* millicelsius */
+					temperature = <99000>; /* millicelsius */
+					hysteresis = <1000>; /* millicelsius */
 					type = "active";
 				};
 				little_alert6: little-alert6 {
 					temperature = <101000>; /* millicelsius */
-					hysteresis = <5000>; /* millicelsius */
+					hysteresis = <1000>; /* millicelsius */
 					type = "active";
 				};
 				little_hot: little-hot {
 					temperature = <115000>; /* millicelsius */
-					hysteresis = <5000>; /* millicelsius */
+					hysteresis = <1000>; /* millicelsius */
 					type = "hot";
 				};
 			};

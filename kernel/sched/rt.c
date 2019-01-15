@@ -266,6 +266,7 @@ u64 decay_load(u64 val, u64 n);
 u32 accumulate_sum(u64 delta, int cpu, struct sched_avg *sa,
 	       unsigned long weight, int running, struct cfs_rq *cfs_rq);
 
+
 /*
  * We can represent the historical contribution to runnable average as the
  * coefficients of a geometric series.  To do this we sub-divide our runnable
@@ -298,6 +299,7 @@ static __always_inline int
 __update_load_avg(u64 now, int cpu, struct sched_avg *sa,
 		  unsigned long weight, int running, struct cfs_rq *cfs_rq)
 {
+	
 	u64 delta;
 
 	delta = now - sa->last_update_time;
@@ -318,7 +320,6 @@ __update_load_avg(u64 now, int cpu, struct sched_avg *sa,
 	if (!delta)
 		return 0;
 	sa->last_update_time = now;
-
 	/*
 	 * Now we know we crossed measurement unit boundaries. The *_avg
 	 * accrues by two steps:
@@ -328,7 +329,6 @@ __update_load_avg(u64 now, int cpu, struct sched_avg *sa,
 	 */
 	if (!accumulate_sum(delta, cpu, sa, weight, running, cfs_rq))
 		return 0;
-
 /*
 	 * Step 2: update *_avg.
 	 */
@@ -337,7 +337,6 @@ __update_load_avg(u64 now, int cpu, struct sched_avg *sa,
 		cfs_rq->runnable_load_avg =
 			div_u64(cfs_rq->runnable_load_sum, LOAD_AVG_MAX);
 	}
-
 	sa->util_avg = sa->util_sum / LOAD_AVG_MAX;
 
 	return 1;

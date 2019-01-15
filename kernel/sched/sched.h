@@ -1771,7 +1771,8 @@ static inline unsigned long __cpu_util(int cpu, int delta)
 		util = div_u64(util, walt_ravg_window);
 	}
 #endif
-        util = cfs_rq->avg.util_avg;
+	
+	util = cfs_rq->avg.util_avg;
 
 	if (sched_feat(UTIL_EST))
 		util = max_t(unsigned long, util, READ_ONCE(cfs_rq->avg.util_est.enqueued));

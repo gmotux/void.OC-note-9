@@ -559,8 +559,8 @@
 				};
 				buck2_reg: BUCK2 {
 					regulator-name = "vdd_cpucl1";
-					regulator-min-microvolt = <500000>;
-					regulator-max-microvolt = <1255000>;
+					regulator-min-microvolt = <450000>;
+					regulator-max-microvolt = <1300000>;
 					regulator-always-on;
 					regulator-ramp-delay = <6000>;
 					regulator-initial-mode = <1>;
@@ -569,7 +569,7 @@
 				buck3_reg: BUCK3 {
 					regulator-name = "vdd_cpucl0";
 					regulator-min-microvolt = <450000>;
-					regulator-max-microvolt = <1250000>;
+					regulator-max-microvolt = <1300000>;
 					regulator-always-on;
 					regulator-ramp-delay = <6000>;
 					regulator-initial-mode = <1>;
@@ -605,7 +605,7 @@
 				buck7_reg: BUCK7 {
 					regulator-name = "vdd_cpucl1_m";
 					regulator-min-microvolt = <450000>;
-					regulator-max-microvolt = <1250000>;
+					regulator-max-microvolt = <1300000>;
 					regulator-always-on;
 					regulator-ramp-delay = <6000>;
 					regulator-initial-mode = <1>;
@@ -1993,7 +1993,7 @@
 		vdd_lldo3 {
 			regulator_name = "vdd_lldo3";
 			suspend_volt = <1250000>;
-			init_volt = <1250000>;
+			init_volt = <1300000>;
 			volt_range_step = <62500>;
 		};
 
@@ -2453,8 +2453,8 @@
 				cl0 {
 					qos,label="LIT";
 					qos,delay_time=<9>;
-					qos,table_size=<12>;
-					qos,table=<2002000 1950000 1794000 1690000 1456000 1248000 1053000 949000 832000 715000 598000
+					qos,table_size=<10>;
+					qos,table=<1794000 1690000 1456000 1248000 1053000 949000 832000 715000 598000
 						455000>;
 				};
 
@@ -2462,8 +2462,8 @@
 					qos,label="BIG";
 					qos,delay_time=<8>;
 					qos,big_turbo_enable=<7>;
-					qos,s_table_size=<21>;
-					qos,s_table=<2918000 2886000 2860000 2704000 2652000 2496000 2314000 2106000 2002000 1924000 1794000 1690000
+					qos,s_table_size=<18>;
+					qos,s_table=<2704000 2652000 2496000 2314000 2106000 2002000 1924000 1794000 1690000
 						1586000 1469000 1261000	1170000 1066000 962000 858000 741000 650000>;
 					qos,d_table_size=<15>;
 					qos,d_table=<2314000 2106000 2002000 1924000 1794000 1690000 1586000 1469000 1261000
