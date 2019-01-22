@@ -19,12 +19,12 @@
 
 unsigned long task_util(struct task_struct *p)
 {
-    #ifdef CONFIG_SCHED_WALT
+#ifdef CONFIG_SCHED_WALT
 	if (!walt_disabled && sysctl_sched_use_walt_task_util) {
 		unsigned long demand = p->ravg.demand;
 		return (demand << SCHED_CAPACITY_SHIFT) / walt_ravg_window;
 	}
-    #endif
+#endif
 
 	if (rt_task(p))
 		return p->rt.avg.util_avg;
@@ -44,7 +44,15 @@ static inline struct sched_entity *se_of(struct sched_avg *sa)
 
 #define entity_is_cfs_rq(se)	(se->my_q)
 #define entity_is_task(se)	(!se->my_q)
-#define LOAD_AVG_MAX		47742
+#ifdef CONFIG_PELT_HALFLIFE_32
+#define LOAD_AVG_MAX 47742 /* maximum possible load avg */
+#endif
+#ifdef CONFIG_PELT_HALFLIFE_16
+#define LOAD_AVG_MAX 24152
+#endif
+#ifdef CONFIG_PELT_HALFLIFE_8
+#define LOAD_AVG_MAX 12337
+#endif
 
 static unsigned long maxcap_val = 1024;
 static int maxcap_cpu = 0;
@@ -613,26 +621,26 @@ static int cpu_util_wake(int cpu, struct task_struct *p)
 	struct cfs_rq *cfs_rq;
 	unsigned long util;
 
-        #ifdef CONFIG_SCHED_WALT
-                /*
-                 * WALT does not decay idle tasks in the same manner
-                 * as PELT, so it makes little sense to subtract task
-                 * utilization from cpu utilization. Instead just use
-                 * cpu_util for this case.
-                 */
-                if (!walt_disabled && sysctl_sched_use_walt_cpu_util &&
-                    p->state == TASK_WAKING)
-                        return cpu_util(cpu);
-        #endif
+#ifdef CONFIG_SCHED_WALT
+	/*
+	 * WALT does not decay idle tasks in the same manner
+	 * as PELT, so it makes little sense to subtract task
+	 * utilization from cpu utilization. Instead just use
+	 * cpu_util for this case.
+	 */
+	if (!walt_disabled && sysctl_sched_use_walt_cpu_util &&
+	    p->state == TASK_WAKING)
+		return cpu_util(cpu);
+#endif
 
 	/* Task has no contribution or is new */
 	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
 		return cpu_util(cpu);
 
-
 	cfs_rq = &cpu_rq(cpu)->cfs;
 	util = READ_ONCE(cfs_rq->avg.util_avg);
-/* Discount task's blocked util from CPU's util */
+
+	/* Discount task's blocked util from CPU's util */
 	util -= min_t(unsigned int, util, task_util(p));
 
 	/*
@@ -1602,7 +1610,7 @@ pure_initcall(init_ontime);
 /**********************************************************************
  * cpu selection                                                      *
  **********************************************************************/
-unsigned long boosted_task_util(struct task_struct *task);
+unsigned long boosted_task_util(struct task_struct *p);
 int energy_diff(struct energy_env *eenv);
 
 static inline int find_best_target(struct sched_domain *sd, struct task_struct *p)
@@ -1704,7 +1712,7 @@ static inline int find_best_target(struct sched_domain *sd, struct task_struct *
 				.util_delta     = task_util(p),
 				.src_cpu        = task_cpu(p),
 				.dst_cpu        = i,
-				.task           = p,
+				.p              = p,
 			};
 
 			if (eenv.src_cpu == eenv.dst_cpu)
@@ -1755,7 +1763,7 @@ static int select_energy_cpu(struct sched_domain *sd, struct task_struct *p,
 			.util_delta     = task_util(p),
 			.src_cpu        = prev_cpu,
 			.dst_cpu        = target_cpu,
-			.task           = p,
+			.p              = p,
 		};
 
 		/* Not enough spare capacity on previous cpu */

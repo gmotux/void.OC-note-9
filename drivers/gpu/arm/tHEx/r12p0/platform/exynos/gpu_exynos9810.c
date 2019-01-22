@@ -69,12 +69,14 @@ void __iomem *g3d1_outstanding_regs;
 
 /*  clk,vol,abb,min,max,down stay, pm_qos mem, pm_qos int, pm_qos cpu_kfc_min, pm_qos cpu_egl_max */
 static gpu_dvfs_info gpu_dvfs_table_default[] = {
-	{572, 800000, 0, 78, 100, 9, 0, 1794000, 400000, 1950000, CPU_MAX},
-	{546, 800000, 0, 78,  99, 5, 0, 1794000, 400000, 1950000, CPU_MAX},
-	{455, 800000, 0, 78,  85, 1, 0, 1539000, 400000, 1794000, CPU_MAX},
-	{338, 800000, 0, 78,  85, 1, 0, 1352000, 267000, 1248000, CPU_MAX},
-	{299, 800000, 0, 78,  85, 1, 0, 1014000, 267000,       0, CPU_MAX},
-	{260, 800000, 0, 78,  85, 1, 0,  676000, 178000,       0, CPU_MAX},
+	{676, 850000, 0, 88, 100, 5, 0, 2002000, 400000, 1794000, CPU_MAX},
+	{637, 800000, 0, 78,  99, 5, 0, 2002000, 400000, 1794000, CPU_MAX},
+	{598, 800000, 0, 78,  99, 5, 0, 2002000, 400000, 1794000, CPU_MAX},
+	{572, 800000, 0, 78,  85, 5, 0, 1794000, 400000, 1794000, CPU_MAX},
+	{546, 800000, 0, 78,  85, 9, 0, 1540000, 400000, 1456000, CPU_MAX},
+	{455, 800000, 0, 78,  85, 1, 0, 1352000, 400000, 1248000, CPU_MAX},
+	{338, 800000, 0, 78,  85, 1, 0, 1014000, 267000,  949000, CPU_MAX},
+	{260, 800000, 0, 78,  85, 1, 0,  421000, 178000,       0, CPU_MAX},
 };
 
 static int mif_min_table[] = {
@@ -86,8 +88,8 @@ static int mif_min_table[] = {
 };
 
 static gpu_attribute gpu_config_attributes[] = {
-	{GPU_MAX_CLOCK, 572},
-	{GPU_MAX_CLOCK_LIMIT, 572},
+	{GPU_MAX_CLOCK, 676},
+	{GPU_MAX_CLOCK_LIMIT, 676},
 	{GPU_MIN_CLOCK, 260},
 	{GPU_DVFS_START_CLOCK, 260},
 	{GPU_DVFS_BL_CONFIG_CLOCK, 260},
@@ -104,18 +106,18 @@ static gpu_attribute gpu_config_attributes[] = {
 	{GPU_GOVERNOR_TABLE_SIZE_INTERACTIVE, GPU_DVFS_TABLE_LIST_SIZE(gpu_dvfs_table_default)},
 	{GPU_GOVERNOR_TABLE_SIZE_STATIC, GPU_DVFS_TABLE_LIST_SIZE(gpu_dvfs_table_default)},
 	{GPU_GOVERNOR_TABLE_SIZE_BOOSTER, GPU_DVFS_TABLE_LIST_SIZE(gpu_dvfs_table_default)},
-	{GPU_GOVERNOR_INTERACTIVE_HIGHSPEED_CLOCK, 455},
+	{GPU_GOVERNOR_INTERACTIVE_HIGHSPEED_CLOCK, 676},
 	{GPU_GOVERNOR_INTERACTIVE_HIGHSPEED_LOAD, 95},
 	{GPU_GOVERNOR_INTERACTIVE_HIGHSPEED_DELAY, 0},
 	{GPU_DEFAULT_VOLTAGE, 800000},
 	{GPU_COLD_MINIMUM_VOL, 0},
 	{GPU_VOLTAGE_OFFSET_MARGIN, 37500},
 	{GPU_TMU_CONTROL, 1},
-	{GPU_TEMP_THROTTLING1, 572},
-	{GPU_TEMP_THROTTLING2, 546},
-	{GPU_TEMP_THROTTLING3, 455},
-	{GPU_TEMP_THROTTLING4, 338},
-	{GPU_TEMP_THROTTLING5, 260},
+	{GPU_TEMP_THROTTLING1, 676},
+	{GPU_TEMP_THROTTLING2, 637},
+	{GPU_TEMP_THROTTLING3, 598},
+	{GPU_TEMP_THROTTLING4, 455},
+	{GPU_TEMP_THROTTLING5, 572},
 	{GPU_TEMP_TRIPPING, 260},
 	{GPU_POWER_COEFF, 625}, /* all core on param */
 	{GPU_DVFS_TIME_INTERVAL, 5},
@@ -129,12 +131,12 @@ static gpu_attribute gpu_config_attributes[] = {
 	{GPU_RUNTIME_PM_DELAY_TIME, 50},
 	{GPU_DVFS_POLLING_TIME, 30},
 	{GPU_PMQOS_INT_DISABLE, 1},
-	{GPU_PMQOS_MIF_MAX_CLOCK, 1794000},
-	{GPU_PMQOS_MIF_MAX_CLOCK_BASE, 572},
+	{GPU_PMQOS_MIF_MAX_CLOCK, 2002000},
+	{GPU_PMQOS_MIF_MAX_CLOCK_BASE, 676},
 	{GPU_CL_DVFS_START_BASE, 455},
 	{GPU_DEBUG_LEVEL, DVFS_WARNING},
 	{GPU_TRACE_LEVEL, TRACE_ALL},
-	{GPU_MO_MIN_CLOCK, 455},
+	{GPU_MO_MIN_CLOCK, 546},
 	{GPU_BOOST_EGL_MIN_LOCK, 1872000},
 #ifdef CONFIG_MALI_VK_BOOST
 	{GPU_VK_BOOST_MAX_LOCK, 338},
@@ -489,8 +491,8 @@ int gpu_asv_calibration_start(void)
 
 	platform->gpu_auto_cali_status = true;
 	gpu_control_power_policy_set(pkbdev, "always_on");
-	gpu_dvfs_clock_lock(GPU_DVFS_MAX_LOCK, ASV_CALI_LOCK, 546);
-	gpu_dvfs_clock_lock(GPU_DVFS_MIN_LOCK, ASV_CALI_LOCK, 546);
+	gpu_dvfs_clock_lock(GPU_DVFS_MAX_LOCK, ASV_CALI_LOCK, 676);
+	gpu_dvfs_clock_lock(GPU_DVFS_MIN_LOCK, ASV_CALI_LOCK, 676);
 
 	if (NULL == gpu_asv_cali_wq) {
 		INIT_DELAYED_WORK(&gpu_asv_cali_stop_work, gpu_asv_calibration_stop_callback);

@@ -1157,9 +1157,10 @@ struct energy_env {
 	int			util_delta;
 	int			src_cpu;
 	int			dst_cpu;
+	int			trg_cpu;
 	int			energy;
 	int			payoff;
-	struct task_struct	*task;
+	struct task_struct	*p;
 	struct {
 		int before;
 		int after;
@@ -1784,6 +1785,7 @@ struct task_struct {
 	 * of this task
 	 */
 	u32 init_load_pct;
+	u64 last_sleep_ts;
 #endif
 
 #ifdef CONFIG_CGROUP_SCHED

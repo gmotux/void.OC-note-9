@@ -181,26 +181,25 @@ static unsigned int apply_pm_qos(struct exynos_cpufreq_domain *domain,
 					struct cpufreq_policy *policy,
 					unsigned int target_freq)
 {
-	unsigned int freq;
-	int qos_min, qos_max;
+//	unsigned int freq;
+//	int qos_min, qos_max;
 
 	/*
 	 * In case of static governor, it should garantee to scale to
 	 * target, it does not apply PM QoS.
 	 */
-	if (static_governor(policy))
+//	if (static_governor(policy))
 		return target_freq;
 
-	qos_min = pm_qos_request(domain->pm_qos_min_class);
-	qos_max = pm_qos_request(domain->pm_qos_max_class);
-
-	if (qos_min < 0 || qos_max < 0)
-		return target_freq;
-
-	freq = max((unsigned int)qos_min, target_freq);
-	freq = min((unsigned int)qos_max, freq);
-
-	return freq;
+//	qos_min = pm_qos_request(domain->pm_qos_min_class);
+//	qos_max = pm_qos_request(domain->pm_qos_max_class);
+//
+//	if (qos_min < 0 || qos_max < 0)
+//		return target_freq;
+//
+//	freq = max((unsigned int)qos_min, target_freq);
+//	freq = min((unsigned int)qos_max, freq);
+//	return freq;
 }
 
 static int pre_scale(void)
@@ -1213,10 +1212,27 @@ static __init int init_table(struct exynos_cpufreq_domain *domain)
 	for (index = 0; index < domain->table_size; index++) {
 		domain->freq_table[index].driver_data = index;
 
-		if (table[index] > domain->max_freq)
+		if(domain->id == 0){
+			domain->max_freq = 2002000U;
+			domain->max_usable_freq = 2002000U;
+			domain->freq_table[0].frequency = 2002000U;
+			domain->freq_table[1].frequency = 1950000U;
+		}
+		if(domain->id == 1){
+			domain->max_freq = 2886000U;
+			domain->max_usable_freq = 2886000U;
+			domain->freq_table[0].frequency = 2886000U;
+			domain->freq_table[1].frequency = 2860000U;
+			domain->freq_table[2].frequency = 2704000U;
+		}
+		if (table[index] > domain->max_freq){
+			pr_err("----> Above max_freq in init_table: %lu",table[index]);
 			domain->freq_table[index].frequency = CPUFREQ_ENTRY_INVALID;
-		else if (table[index] < domain->min_freq)
+		}
+		else if (table[index] < domain->min_freq){
+			pr_err("----> Below min_freq in init_table: %lu",table[index]);
 			domain->freq_table[index].frequency = CPUFREQ_ENTRY_INVALID;
+		}
 		else {
 			struct cpumask mask;
 			domain->freq_table[index].frequency = table[index];
@@ -1228,11 +1244,11 @@ static __init int init_table(struct exynos_cpufreq_domain *domain)
 			dev_pm_opp_add(get_cpu_device(cpumask_first(&mask)),
 					table[index] * 1000, volt_table[index]);
 		}
-
 		/* Initialize table of DVFS manager constraint */
 		list_for_each_entry(dm, &domain->dm_list, list)
 			dm->c.freq_table[index].master_freq = table[index];
 	}
+
 	domain->freq_table[index].driver_data = index;
 	domain->freq_table[index].frequency = CPUFREQ_TABLE_END;
 

@@ -1093,19 +1093,19 @@ static int __init exynos_hpgov_parse_dt(void)
 		goto exit;
 	exynos_hpgov.maxfreq_table[SINGLE] = max_freq;
 
-	if (of_property_read_u32(np, "dual_freq", &freq))
-		goto exit;
-	exynos_hpgov.maxfreq_table[DUAL] = 2860000;
+		if (of_property_read_u32(np, "dual_freq", &freq))
+			goto exit;
+	exynos_hpgov.maxfreq_table[DUAL] = 2704000;
 
-	if (of_property_read_u32(np, "triple_freq", &freq))
-		goto exit;
-	exynos_hpgov.maxfreq_table[TRIPLE] = 2704000;
+		if (of_property_read_u32(np, "triple_freq", &freq))
+			goto exit;
+	exynos_hpgov.maxfreq_table[TRIPLE] = 2652000;
 
-	if (of_property_read_u32(np, "quad_freq", &freq))
-		goto exit;
+		if (of_property_read_u32(np, "quad_freq", &freq))
+			goto exit;
 	exynos_hpgov.maxfreq_table[QUAD] = 2652000;
 
-	exynos_hpgov.maxfreq_table[DISABLE] = 2652000;
+	exynos_hpgov.maxfreq_table[DISABLE] = 2704000;
 
 	for (i = 0; i <= QUAD; i++)
 		pr_info("HP_GOV: mode %d: max_freq = %d\n",

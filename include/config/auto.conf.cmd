@@ -1160,6 +1160,7 @@ deps_config := \
 	net/netlabel/Kconfig \
 	net/ipv6/Kconfig \
 	net/ipv4/Kconfig \
+	net/wireguard/Kconfig \
 	net/iucv/Kconfig \
 	net/xfrm/Kconfig \
 	net/unix/Kconfig \
@@ -1202,7 +1203,7 @@ deps_config := \
 include/config/auto.conf: \
 	$(deps_config)
 
-ifneq "$(KERNELVERSION)" "4.9.150"
+ifneq "$(KERNELVERSION)" "4.9.151"
 include/config/auto.conf: FORCE
 endif
 ifneq "$(ARCH)" "arm64"
